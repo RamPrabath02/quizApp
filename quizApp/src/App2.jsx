@@ -16,7 +16,7 @@ function App2() {
   const fetchQuizzes = async () => {
     try {
       const response = await backendClient.get("/quiz");
-      console.log(response.data)
+      console.log(response.data);
       setQuizzes(response.data);
     } catch (error) {
       console.error("Error fetching quizzes:", error);
