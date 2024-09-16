@@ -1,0 +1,39 @@
+This is a React functional component named [App](cci:1://d:\Training\React js\QuizApp\quizApp\src\App.jsx:6:0-112:1) that renders a quiz application. Here's a succinct breakdown of its functionality:
+
+State Management
+
+The component uses the useState hook to manage several states:
+
+questions: an array of quiz questions
+startCondition: a boolean indicating whether the quiz has started
+score: the user's current score
+clickedOptions: an object tracking which options have been clicked for each question
+makeQuiz: a boolean indicating whether the user wants to create their own quiz
+Initialization
+
+The component initializes the questions state with data from a quizData object using the useEffect hook.
+
+Event Handling
+
+The component defines two event handlers:
+
+handleAnswerClick: updates the score and marks the clicked option as selected when a user clicks on an answer option
+makeQuizValue: sets the makeQuiz state to true when the user clicks the "Make Quiz" button
+Rendering
+
+The component renders several sections:
+
+A header with a title and a "Start" button to begin the quiz
+A section to create a custom quiz (only visible when makeQuiz is true)
+A quiz container that displays the questions and options (only visible when startCondition is true)
+A score display that shows the user's current score and the total number of questions
+Overall, this component manages the state and rendering of a quiz application, allowing users to start a quiz, answer questions, and view their score.
+
+
+
+
+
+
+
+1 Sources
+Tracking App.jsx
