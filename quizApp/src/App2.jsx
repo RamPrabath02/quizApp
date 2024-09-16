@@ -4,6 +4,7 @@ import axios from "../services/api"; // Import the Axios instance
 import QuizList from "./components2/QuizList";
 import CreateQuiz from "./components2/CreateQuiz";
 import QuizDetails from "./components2/QuizDetails";
+import backendClient from "../services/api";
 
 function App2() {
   const [quizzes, setQuizzes] = useState([]);
@@ -14,7 +15,8 @@ function App2() {
 
   const fetchQuizzes = async () => {
     try {
-      const response = await axios.get("/quiz");
+      const response = await backendClient.get("/quiz");
+      console.log(response.data)
       setQuizzes(response.data);
     } catch (error) {
       console.error("Error fetching quizzes:", error);

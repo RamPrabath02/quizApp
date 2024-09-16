@@ -12,3 +12,12 @@ class Question(db.Model):
     options = db.Column(db.JSON, nullable=False)
     answer = db.Column(db.String(100), nullable=False)
     quiz_id = db.Column(db.Integer, db.ForeignKey('quiz.id'), nullable=False)
+
+    def to_dict(self):
+        return{
+            "id": self.id,
+            "question": self.question,
+            "options": self.options,
+            "answer": self.answer,
+            "quiz_id": self.quiz_id
+        }

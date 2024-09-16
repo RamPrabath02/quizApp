@@ -1,5 +1,5 @@
-import React, { useState } from "react";
-import axios from "axios";
+import { useState } from "react";
+import backendClient from "../../services/api.js";
 
 const CreateQuiz = ({ fetchQuizzes }) => {
   const [quizName, setQuizName] = useState("");
@@ -35,8 +35,9 @@ const CreateQuiz = ({ fetchQuizzes }) => {
     };
 
     try {
-      await axios.post("http://localhost:8000/createQuiz", quizData);
+      await backendClient.post("/createQuiz", quizData);
       fetchQuizzes(); // Refresh the quiz list after creation
+      window.location.href = "/"
     } catch (error) {
       console.error("Error creating quiz:", error);
     }

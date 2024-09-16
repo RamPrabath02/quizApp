@@ -1,6 +1,7 @@
-import React, { useState, useEffect } from "react";
+import { useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
 import axios from "axios";
+import backendClient from "../../services/api.js";
 
 const QuizDetails = () => {
   const { quizId } = useParams();
@@ -10,15 +11,14 @@ const QuizDetails = () => {
   useEffect(() => {
     const fetchQuiz = async () => {
       try {
-        const response = await axios.get(
-          `http://localhost:8000/quiz/${quizId}`
+        const response = await backendClient.get(
+          `/quiz/${quizId}`
         );
         setQuiz(response.data);
       } catch (error) {
         console.error("Error fetching quiz details:", error);
       }
     };
-
     fetchQuiz();
   }, [quizId]);
 

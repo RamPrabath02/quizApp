@@ -55,6 +55,16 @@ def get_all_quizzes():
         })
     return jsonify(result), 200
 
+
+@quiz_routes.route("/quiz/<id>", methods=['GET'])
+def get_quiz_by_id(id):
+    quiz = Quiz.query.filter_by(id=id).first()
+    response = {"quizName":quiz.quizName,
+                "questions": []}
+    for question in quiz.questions:
+        response['questions'].append(question.to_dict())
+    return jsonify(response), 200
+
 # Delete a quiz by ID
 @quiz_routes.route('/deleteQuiz/<int:quiz_id>', methods=['DELETE'])
 def delete_quiz(quiz_id):
