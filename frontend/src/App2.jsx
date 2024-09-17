@@ -1,9 +1,9 @@
 // import React, { useState, useEffect } from "react";
 // import { BrowserRouter as Router, Route, Routes, Link } from "react-router-dom";
 // import axios from "../services/api"; // Import the Axios instance
-// import QuizList from "./components/QuizList";
-// import CreateQuiz from "./components/CreateQuiz";
-// import QuizDetails from "./components/QuizDetails";
+// import QuizList from "./components2/QuizList";
+// import CreateQuiz from "./components2/CreateQuiz";
+// import QuizDetails from "./components2/QuizDetails";
 // import backendClient from "../services/api";
 
 // function App2() {
@@ -129,9 +129,9 @@
 
 // // export default App;
 
-import { useState } from "react";
+import React, { useState } from "react";
 import Home from "./Home"; // Home page where quizzes will be listed
-import Login from "./components/Login";
+import Login from "./components2/Login";
 
 const App = () => {
   const [isLoggedIn, setIsLoggedIn] = useState(false);

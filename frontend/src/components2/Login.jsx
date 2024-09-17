@@ -1,5 +1,5 @@
 // Login.jsx
-import { useState } from "react";
+import React, { useState } from "react";
 
 const Login = ({ onLogin }) => {
   const [username, setUsername] = useState("");
@@ -16,7 +16,7 @@ const Login = ({ onLogin }) => {
 
   return (
     <div className="container mt-5">
-      <h2 className="text-center">Login</h2>
+      <h2 className="text-center">Admin Login</h2>
       <form onSubmit={handleSubmit}>
         <div className="mb-3">
           <label className="form-label">Username</label>
