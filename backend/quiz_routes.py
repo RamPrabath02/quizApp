@@ -91,3 +91,24 @@ def update_question(question_id):
     
     db.session.commit()
     return jsonify({'message': 'Question updated successfully!'}), 200
+
+# Update quiz info
+@quiz_routes.route('/updateQuiz/<int:quiz_id>', methods=['PATCH'])
+def update_quiz(quiz_id):
+    data = request.get_json()
+    quiz = Quiz.query.get(quiz_id)
+
+    if not quiz:
+        return jsonify({'error': 'Quiz not found.'}), 404
+
+    quiz.quizName = data.get('quizName', quiz.quizName)
+
+    for question_data in data.get('questions', []):
+        question = Question.query.get(question_data['id'])
+        if question:
+            question.question = question_data.get('question', question.question)
+            question.options = question_data.get('options', question.options)
+            question.answer = question_data.get('answer', question.answer)
+
+    db.session.commit()
+    return jsonify({'message': 'Quiz updated successfully!'}), 200
