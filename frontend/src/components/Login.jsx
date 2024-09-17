@@ -1,25 +1,15 @@
 // Login.jsx
 import { useState } from "react";
-import backendClient from "../../services/api.js";
 
-const Login = ({ onLogin, isAdmin }) => {
+const Login = ({ onLogin }) => {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
 
-  const handleSubmit = async (e) => {
+  const handleSubmit = (e) => {
     e.preventDefault();
-    const payload = {
-      username,
-      password
-    }
-    console.log(payload)
-    try{
-      const response = await backendClient.post("/login", payload)
-      onLogin(true)
-      if (response.is_admin) {
-        isAdmin(true)
-      }
-    } catch(e){
+    if (username === "admin" && password === "admin123") {
+      onLogin(true);
+    } else {
       alert("Invalid credentials");
     }
   };

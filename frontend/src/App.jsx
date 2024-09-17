@@ -132,13 +132,11 @@
 import { useState } from "react";
 import Home from "./Home"; // Home page where quizzes will be listed
 import Login from "./components/Login";
-import QuizPage from "./components/QuizPage.jsx";
 
 const App = () => {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
-  const [isAdmin, setIsAdmin] = useState(false)
 
-  return <div>{!isLoggedIn ? <Login onLogin={setIsLoggedIn} isAdmin={setIsAdmin} />: isAdmin ? <Home/>:<QuizPage />}</div>;
+  return <div>{isLoggedIn ? <Home /> : <Login onLogin={setIsLoggedIn} />}</div>;
 };
 
 export default App;

@@ -74,10 +74,9 @@
 // QuizPage.jsx
 
 import "bootstrap/dist/css/bootstrap.min.css";
-import { useState, useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import axios from "axios";
 import { useParams } from "react-router-dom";
-import backendClient from "../../services/api.js";
 
 const QuizPage = () => {
   const { quizId } = useParams();
@@ -87,7 +86,7 @@ const QuizPage = () => {
 
   useEffect(() => {
     const fetchQuiz = async () => {
-      const response = await backendClient.get(`/quiz/${quizId}`);
+      const response = await axios.get(`/quiz/${quizId}`);
       setQuestions(response.data.questions);
     };
     fetchQuiz();
