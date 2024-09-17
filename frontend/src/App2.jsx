@@ -155,7 +155,7 @@ import "bootstrap/dist/css/bootstrap.min.css";
 function App2() {
   const [quizzes, setQuizzes] = useState([]);
   const [isAdmin, setIsAdmin] = useState(false); // Check for admin login
-
+  console.log(isAdmin)
   useEffect(() => {
     fetchQuizzes();
   }, []);
@@ -211,7 +211,7 @@ function App2() {
         </nav>
 
         <Routes>
-          <Route path="/" element={<HomePage quizzes={quizzes} />} />
+          <Route path="/" element={<HomePage quizzes={quizzes} setQuizzes={setQuizzes} />} />
           <Route path="/quiz/:quizId" element={<QuizPage />} />
           <Route
             path="/createQuiz"

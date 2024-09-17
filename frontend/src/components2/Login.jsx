@@ -56,9 +56,9 @@ const Login = ({ setIsAdmin }) => {
   const handleLogin = (e) => {
     e.preventDefault();
     // Simple hardcoded password check for admin
+    console.log(password == "admin123")
     if (password === "admin123") {
       setIsAdmin(true);
-      window.location.href = "/";
     } else {
       alert("Invalid password!");
     }

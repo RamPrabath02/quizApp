@@ -144,6 +144,7 @@
 
 import React, { useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
+import backendClient from "../../services/api.js";
 
 function QuizPage() {
   const { quizId } = useParams();
@@ -152,10 +153,15 @@ function QuizPage() {
   const [clickedOptions, setClickedOptions] = useState({});
 
   useEffect(() => {
-    fetch(`/quiz/${quizId}`)
-      .then((res) => res.json())
-      .then((data) => setQuiz(data))
-      .catch((err) => console.log("Fetch error:", err));
+    const fetchQuizData = async() => {
+     try{
+       const response = await backendClient.get(`/quiz/${quizId}`);
+       setQuiz(response.data)
+     } catch (err){
+       console.log("Fetch error:", err)
+     }
+    }
+    fetchQuizData();
   }, [quizId]);
 
   const handleAnswerClick = (correctAnswer, selectedAnswer, questionIndex) => {
