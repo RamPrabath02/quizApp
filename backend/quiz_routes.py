@@ -1,6 +1,7 @@
 from flask import Blueprint, jsonify, request
 from db_init import db
-from models import Quiz, Question
+from models import Quiz, Question, User
+from models.User import check_password
 from flask_cors import CORS
 
 quiz_routes = Blueprint('quiz_routes', __name__)
@@ -30,9 +31,13 @@ def create_quiz():
             quiz_id=new_quiz.id
         )
         db.session.add(new_question)
+    try:
+        db.session.commit()
+        return jsonify({'message': 'Quiz created successfully!', 'quiz': data}), 201
+    except Exception as e:
+        db.session.rollback()
+        print("Error in creating a quiz", str(e))
 
-    db.session.commit()
-    return jsonify({'message': 'Quiz created successfully!', 'quiz': data}), 201
 
 # Fetch all quizzes
 @quiz_routes.route('/quiz', methods=['GET'])
@@ -91,3 +96,40 @@ def update_question(question_id):
     
     db.session.commit()
     return jsonify({'message': 'Question updated successfully!'}), 200
+
+@quiz_routes.route('/login', methods=["POST"])
+def login():
+    data = request.get_json()
+    if None in (data['username'], data['password']):
+        return jsonify({'message':'missing parameters'}), 400
+    user = User.query.filter_by(username=data.get("username"))
+    if not user or user.check_password(data['password']):
+        return jsonify({'message': 'invalid username or password'}), 400
+    return jsonify(
+        {
+            "message": "Login Successful",
+            "is_admin": True
+        }), 200
+
+
+@quiz_routes.route("/signin", methods=['POST'])
+def signin():
+    data = request.get_json()
+    if None in (data['username'], data['password']):
+        return jsonify({'message': 'missing parameters'}), 400
+    user = User.query.filter_by(username=data.get("username"))
+    if user:
+       return jsonify({'message': 'username already exists'}), 400
+
+    user = User(username=data.get("username"), role="user")
+    user.set_password(data.get("password"))
+    db.session.add(user)
+    try:
+        db.session.commit()
+        return jsonify(
+        {
+            "message": "User created Successfully"
+        }), 200
+    except Exception as e:
+        db.session.rollback()
+        print("Error adding user to db", str(e))
