@@ -1,6 +1,6 @@
-import uuid
-from sqlalchemy.dialects.postgresql import UUID
-from werkzeug.security import generate_password_hash, check_password_hash
+# import uuid
+# from sqlalchemy.dialects.postgresql import UUID
+# from werkzeug.security import generate_password_hash, check_password_hash
 
 from db_init import db
 
@@ -18,7 +18,7 @@ class Question(db.Model):
     question = db.Column(db.String(200), nullable=False)
     options = db.Column(db.JSON, nullable=False)
     answer = db.Column(db.String(100), nullable=False)
-    quiz_id = db.Column(db.Integer, db.ForeignKey('quiz.id'), nullable=False)
+    quiz_id = db.Column(db.Integer, db.ForeignKey('quizzes.id'), nullable=False)
 
     def to_dict(self):
         return{
