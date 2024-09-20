@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { BrowserRouter as Router, Route, Routes, Link } from "react-router-dom";
 import axios from "../services/api";
-import backgroundImage from "C:/Users/Ram Prabath/Downloads/quiz_background.jpg";
 
 import CreateQuiz from "./components2/CreateQuiz";
 
@@ -14,10 +13,10 @@ import EditQuiz from "./components2/EditQuiz";
 function App2() {
   const [quizzes, setQuizzes] = useState([]);
   const [isAdmin, setIsAdmin] = useState(false);
-  console.log(isAdmin);
+  // console.log(isAdmin);
   useEffect(() => {
     fetchQuizzes();
-    console.log("fetcehed quiz: " + fetchQuizzes.value);
+    // console.log("fetcehed quiz: " + fetchQuizzes.value);
   }, []);
 
   const fetchQuizzes = async () => {
@@ -40,37 +39,37 @@ function App2() {
 
   return (
     <Router>
-      <div
-        className="container"
-        // style={{
-        //   backgroundImage: `url(${backgroundImage})`,
-        //   backgroundSize: "cover", // Adjust size (cover/contain)
-        //   backgroundPosition: "center", // Center the image
-        //   height: "100vh", // Full viewport height
-        //   width: "100%", // Full width
-        // }}
-      >
-        <nav className="navbar navbar-expand-lg navbar-light bg-light mb-4">
-          <Link className="navbar-brand" to="/">
+      <div className="container">
+        <nav className="navbar navbar-expand-lg navbar-light bg-light rounded-2  p-2">
+          <Link className="navbar-brand bg-body-secondary rounded-2 p-2" to="/">
             Quiz App
           </Link>
           <div className="collapse navbar-collapse">
             <ul className="navbar-nav mr-auto">
               <li className="nav-item">
-                <Link className="nav-link" to="/">
+                <Link
+                  className="nav-link bg-body-secondary rounded-2 p-2 "
+                  to="/"
+                >
                   Home
                 </Link>
               </li>
               {isAdmin && (
                 <li className="nav-item">
-                  <Link className="nav-link" to="/createQuiz">
+                  <Link
+                    className="nav-link bg-body-secondary rounded-2 p-2 "
+                    to="/createQuiz"
+                  >
                     Admin Quiz Management
                   </Link>
                 </li>
               )}
               {!isAdmin && (
                 <li className="nav-item">
-                  <Link className="nav-link" to="/login">
+                  <Link
+                    className="nav-link bg-body-secondary rounded-2 p-2"
+                    to="/login"
+                  >
                     Admin Quiz Management
                   </Link>
                 </li>

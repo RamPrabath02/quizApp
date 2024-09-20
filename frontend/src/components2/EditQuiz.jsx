@@ -11,6 +11,11 @@ const EditQuiz = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
 
+  const handleQuestionChange = (index, field, value) => {
+    const updatedQuestions = [...questions];
+    updatedQuestions[index][field] = value;
+    setQuestions(updatedQuestions);
+  };
   useEffect(() => {
     fetchQuizDetails();
   }, [quizId]);
@@ -55,138 +60,6 @@ const EditQuiz = () => {
     return <p>{error}</p>;
   }
 
-  // return (
-  //   <div className="container mt-4">
-  //     <h2>Edit Quiz</h2>
-  //     <form onSubmit={handleSubmit}>
-  //       <div className="form-group">
-  //         <label>Quiz Name</label>
-  //         <input
-  //           type="text"
-  //           className="form-control"
-  //           name="quizName"
-  //           value={quizData.quizName}
-  //           onChange={handleInputChange}
-  //           required
-  //         />
-  //       </div>
-
-  //       <div className="form-group" key={quizData.questions[0].id}>
-  //         <label>Question 1</label>
-  //         <input
-  //           type="text"
-  //           className="form-control"
-  //           name={`question_${0}`}
-  //           value={quizData.questions[0].question || ""}
-  //           onChange={(e) => {
-  //             const newQuestions = [...quizData.questions];
-  //             newQuestions[0].question = e.target.value;
-  //             setQuizData((prevData) => ({
-  //               ...prevData,
-  //               questions: newQuestions,
-  //             }));
-  //           }}
-  //         />
-  //       </div>
-
-  //       <div className="form-group">
-  //         <label>Option 1</label>
-  //         <input
-  //           type="text"
-  //           className="form-control"
-  //           name="options[0]"
-  //           value={quizData.questions[0].options[0] || ""}
-  //           onChange={(e) => {
-  //             const newQuestions = [...quizData.questions];
-  //             newQuestions[0].options[0] = e.target.value;
-  //             setQuizData((prevData) => ({
-  //               ...prevData,
-  //               questions: newQuestions,
-  //             }));
-  //           }}
-  //         />
-  //       </div>
-  //       <div className="form-group">
-  //         <label>Option 2</label>
-  //         <input
-  //           type="text"
-  //           className="form-control"
-  //           name="options[1]"
-  //           value={quizData.questions[0].options[1] || ""}
-  //           onChange={(e) => {
-  //             const newQuestions = [...quizData.questions];
-  //             newQuestions[0].options[1] = e.target.value;
-  //             setQuizData((prevData) => ({
-  //               ...prevData,
-  //               questions: newQuestions,
-  //             }));
-  //           }}
-  //         />
-  //       </div>
-  //       <div className="form-group">
-  //         <label>option 3</label>
-  //         <input
-  //           type="text"
-  //           className="form-control"
-  //           name="options[2]"
-  //           value={quizData.questions[0].options[2] || ""}
-  //           onChange={(e) => {
-  //             const newQuestions = [...quizData.questions];
-  //             newQuestions[0].options[2] = e.target.value;
-  //             setQuizData((prevData) => ({
-  //               ...prevData,
-  //               questions: newQuestions,
-  //             }));
-  //           }}
-  //         />
-  //       </div>
-  //       <div className="form-group">
-  //         <label>option 4</label>
-  //         <input
-  //           type="text"
-  //           className="form-control"
-  //           name="options[3]"
-  //           value={quizData.questions[0].options[3] || ""}
-  //           onChange={(e) => {
-  //             const newQuestions = [...quizData.questions];
-  //             newQuestions[0].options[3] = e.target.value;
-  //             setQuizData((prevData) => ({
-  //               ...prevData,
-  //               questions: newQuestions,
-  //             }));
-  //           }}
-  //         />
-  //       </div>
-  //       <div className="form-group">
-  //         <label>Answer</label>
-  //         <input
-  //           type="text"
-  //           className="form-control"
-  //           name="answer"
-  //           value={quizData.questions[0].answer || ""}
-  //           onChange={(e) => {
-  //             const newQuestions = [...quizData.questions];
-  //             newQuestions[0].answer = e.target.value;
-  //             setQuizData((prevData) => ({
-  //               ...prevData,
-  //               questions: newQuestions,
-  //             }));
-  //           }}
-  //         />
-  //       </div>
-
-  //       <button type="submit" className="btn btn-primary mt-3">
-  //         Update Quiz
-  //       </button>
-  //     </form>
-
-  //     <Link
-  //       id="go-to-quiz-list"
-  //       to="/createQuiz"
-  //       style={{ display: "none" }}
-  //     ></Link>
-  //   </div>
-  // );
   return (
     <div className="container mt-4">
       <h2>Edit Quiz</h2>
@@ -203,7 +76,6 @@ const EditQuiz = () => {
           />
         </div>
 
-        {/* Map through all questions */}
         {quizData.questions.map((question, questionIndex) => (
           <div key={questionIndex}>
             <div className="form-group">
@@ -224,7 +96,6 @@ const EditQuiz = () => {
                 required
               />
             </div>
-            {/* Map through options */}
             {question.options.map((option, optionIndex) => (
               <div className="form-group" key={optionIndex}>
                 <label>Option {optionIndex + 1}</label>
@@ -246,8 +117,7 @@ const EditQuiz = () => {
                 />
               </div>
             ))}
-            {/* Answer field */}
-            <div className="form-group">
+            {/* <div className="form-group">
               <label>Answer</label>
               <input
                 type="text"
@@ -264,8 +134,28 @@ const EditQuiz = () => {
                 }}
                 required
               />
+            </div> */}
+            <div className="mt-2">
+              <label className="form-label text-success">Correct Answer:</label>
+              <select
+                value={question.answer}
+                className="form-control"
+                onChange={(e) =>
+                  handleQuestionChange(questionIndex, "answer", e.target.value)
+                }
+                required
+              >
+                <option value="" disabled>
+                  Select the correct answer
+                </option>
+                {question.options.map((option, optionIndex) => (
+                  <option key={optionIndex} value={option}>
+                    {option}
+                  </option>
+                ))}
+              </select>
             </div>
-            <hr /> {/* Separator between questions */}
+            <hr />
           </div>
         ))}
 
