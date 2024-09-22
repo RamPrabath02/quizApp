@@ -1,23 +1,20 @@
 import React, { useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
 import backendClient from "../../services/api.js";
-import ProgressBar from "./ProgressBar.jsx";
+import Confetti from "react-confetti";
+import "./QuizPage.css";
 
 function QuizPage() {
   const { quizId } = useParams();
   const [quiz, setQuiz] = useState(null);
-  const [score, setScore] = useState(0);
+  const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
   const [clickedOptions, setClickedOptions] = useState({});
+  const [score, setScore] = useState(0);
   const [showResults, setShowResults] = useState(false);
+  const [slideDirection, setSlideDirection] = useState("");
 
-  const [progress, setProgress] = useState(0);
-  const checkAnswer = (selectedOption, correctAnswer) => {
-    if (selectedOption === correctAnswer) {
-      setProgress((prevProgress) => Math.min(prevProgress + 20, 100));
-    } else {
-      setProgress((prevProgress) => Math.max(prevProgress - 20, 0));
-    }
-  };
+  const [showConfetti, setShowConfetti] = useState(false);
+
   useEffect(() => {
     const fetchQuizData = async () => {
       try {
@@ -33,62 +30,106 @@ function QuizPage() {
   const handleAnswerClick = (correctAnswer, selectedAnswer, questionIndex) => {
     if (!clickedOptions[questionIndex]) {
       const isCorrect = correctAnswer === selectedAnswer;
-
       if (isCorrect) {
         setScore((prevScore) => prevScore + 1);
       }
-
       setClickedOptions((prev) => ({
         ...prev,
-        [questionIndex]: isCorrect ? "correct" : "incorrect",
+        [questionIndex]: { selectedAnswer, isCorrect },
       }));
-
-      checkAnswer(selectedAnswer, correctAnswer);
     }
   };
+
+  const handleNextQuestion = () => {
+    if (currentQuestionIndex < quiz.questions.length - 1) {
+      setSlideDirection("slide-right");
+      setTimeout(() => {
+        setCurrentQuestionIndex((prevIndex) => prevIndex + 1);
+      }, 300);
+    }
+  };
+
+  const handlePreviousQuestion = () => {
+    if (currentQuestionIndex > 0) {
+      setSlideDirection("slide-left");
+      setTimeout(() => {
+        setCurrentQuestionIndex((prevIndex) => prevIndex - 1);
+      }, 300);
+    }
+  };
+
+  const handleSubmit = () => {
+    setShowResults(true);
+    setShowConfetti(true);
+    setTimeout(() => {
+      setShowConfetti(false);
+    }, 5000);
+  };
+
   if (!quiz) return <div>Loading...</div>;
 
-  return (
-    <div className="container mt-4 p-2 ">
-      <h2>{quiz.quizName}</h2>
-      {quiz.questions.map((item, index) => (
-        <div key={index} className="card mb-3 p-2">
-          <div className="card-body p-2">
-            <h4>{item.question}</h4>
-            <ul className="p-2">
-              {item.options.map((option, idx) => (
-                <>
-                  <li
-                    key={idx}
-                    onClick={() =>
-                      handleAnswerClick(item.answer, option, index)
-                    }
-                    className={`list-group-item p-2 ${
-                      clickedOptions[index] === "correct"
-                        ? "bg-success text-light p-2 rounded-3"
-                        : clickedOptions[index] === "incorrect"
-                        ? "bg-danger text-light p-2 rounded-3"
-                        : "bg-light rounded-3"
-                    }`}
-                  >
-                    {option}
-                  </li>
-                  <br></br>
-                </>
-              ))}
-            </ul>
-            <ProgressBar progress={progress} />
-          </div>
-        </div>
-      ))}
-      <button
-        onClick={() => setShowResults(true)}
-        className="btn btn-primary mt-3"
-      >
-        Submit
-      </button>
+  const currentQuestion = quiz.questions[currentQuestionIndex];
 
-      {/* Show results only after submission */}
+  return (
+    <div className="container mt-4 quiz-container">
+      {showConfetti && <Confetti />}
+      <h2>{quiz.quizName}</h2>
+      <div className={`question-card ${slideDirection}`}>
+        <h4>{currentQuestion.question}</h4>
+        <ul className="options-list">
+          {currentQuestion.options.map((option, idx) => {
+            const isSelected =
+              clickedOptions[currentQuestionIndex]?.selectedAnswer === option;
+            const isCorrect = clickedOptions[currentQuestionIndex]?.isCorrect;
+
+            const hoverable = !clickedOptions[currentQuestionIndex]
+              ? "hoverable"
+              : "";
+
+            return (
+              <li
+                key={idx}
+                onClick={() =>
+                  handleAnswerClick(
+                    currentQuestion.answer,
+                    option,
+                    currentQuestionIndex
+                  )
+                }
+                className={`list-group-item p-2 ${
+                  isSelected
+                    ? isCorrect
+                      ? "selected-correct"
+                      : "selected-incorrect"
+                    : "unselected"
+                } ${hoverable}`}
+              >
+                {option}
+              </li>
+            );
+          })}
+        </ul>
+      </div>
+      <div className="navigation-buttons mt-4">
+        <button
+          onClick={handlePreviousQuestion}
+          className="btn btn-secondary"
+          disabled={currentQuestionIndex === 0}
+        >
+          Previous
+        </button>
+
+        {currentQuestionIndex < quiz.questions.length - 1 ? (
+          <button onClick={handleNextQuestion} className="btn btn-primary ml-2">
+            Next
+          </button>
+        ) : (
+          <button onClick={handleSubmit} className="btn btn-success ml-2">
+            Submit
+          </button>
+        )}
+      </div>
+
       {showResults && (
         <div className="text-center mt-4">
           <h3 className="score-display">
