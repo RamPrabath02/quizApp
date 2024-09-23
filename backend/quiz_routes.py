@@ -3,11 +3,11 @@ from flask import Blueprint, jsonify, request
 from db_init import db
 from models import Quiz, Question
 from flask_cors import CORS
-
+from pytest import test 
 quiz_routes = Blueprint('quiz_routes', __name__)
 CORS(quiz_routes)
 
-# Create a new quiz
+
 @quiz_routes.route('/createQuiz', methods=['POST'])
 def create_quiz():
     data = request.get_json()
@@ -32,7 +32,7 @@ def create_quiz():
         db.session.add(new_quiz)
         db.session.commit()
 
-        # Add questions to the quiz
+        
         for question_data in data['questions']:
             new_question = Question(
                 question=question_data['question'],
@@ -48,7 +48,7 @@ def create_quiz():
         db.session.rollback()
         return jsonify({'error': 'Error in creating quiz: ' + str(e)}), 500
 
-# Fetch all quizzes
+
 @quiz_routes.route('/quiz', methods=['GET'])
 def get_all_quizzes():
     quizzes = Quiz.query.all()
