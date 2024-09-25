@@ -3,11 +3,11 @@ from flask import Blueprint, jsonify, request
 from db_init import db
 from models import Quiz, Question
 from flask_cors import CORS
-from pytest import test 
+# from pytest import test 
 quiz_routes = Blueprint('quiz_routes', __name__)
 CORS(quiz_routes)
 
-
+#to create quiz both the tables using post 
 @quiz_routes.route('/createQuiz', methods=['POST'])
 def create_quiz():
     data = request.get_json()
@@ -48,7 +48,7 @@ def create_quiz():
         db.session.rollback()
         return jsonify({'error': 'Error in creating quiz: ' + str(e)}), 500
 
-
+# to view all the quiz for quiz list page 
 @quiz_routes.route('/quiz', methods=['GET'])
 def get_all_quizzes():
     quizzes = Quiz.query.all()
@@ -69,7 +69,7 @@ def get_all_quizzes():
         })
     return jsonify(result), 200
 
-# Fetch a quiz by ID
+#get by ID
 @quiz_routes.route("/quiz/<id>", methods=['GET'])
 def get_quiz_by_id(id):
     quiz = Quiz.query.filter_by(id=id).first()
@@ -81,7 +81,7 @@ def get_quiz_by_id(id):
         response['questions'].append(question.to_dict())
     return jsonify(response), 200
 
-# Delete a quiz by ID
+#DEL BY ID
 @quiz_routes.route('/deleteQuiz/<int:quiz_id>', methods=['DELETE'])
 def delete_quiz(quiz_id):
     quiz = Quiz.query.get(quiz_id)
@@ -92,7 +92,7 @@ def delete_quiz(quiz_id):
     db.session.commit()
     return jsonify({'message': 'Quiz deleted successfully!'}), 200
 
-# Update a specific question
+#UpdateQuestion(dont need now)
 @quiz_routes.route('/updateQuestion/<int:question_id>', methods=['PATCH'])
 def update_question(question_id):
     data = request.get_json()
@@ -108,7 +108,7 @@ def update_question(question_id):
     db.session.commit()
     return jsonify({'message': 'Question updated successfully!'}), 200
 
-# Update quiz info
+#Update Full Quiz
 @quiz_routes.route('/updateQuiz/<int:quiz_id>', methods=['PATCH'])
 def update_quiz(quiz_id):
     data = request.get_json()
@@ -119,7 +119,7 @@ def update_quiz(quiz_id):
 
     quiz.quizName = data.get('quizName', quiz.quizName)
 
-    # Update questions
+    #second table 
     for question_data in data.get('questions', []):
         question = Question.query.get(question_data['id'])
         if question:

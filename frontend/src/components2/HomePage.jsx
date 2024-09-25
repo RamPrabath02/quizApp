@@ -4,25 +4,25 @@ import { Link } from "react-router-dom";
 import backendClient from "../../services/api.js";
 
 const HomePage = ({ quizzes, setQuizzes }) => {
-  const deleteQuiz = async (quizId) => {
-    try {
-      await backendClient.delete(`/deleteQuiz/${quizId}`);
-      alert("Deleted successfully");
-      fetchQuizzes();
-    } catch (err) {
-      alert("Error in deleting quiz");
-      console.log(err);
-    }
-  };
-  const fetchQuizzes = async () => {
-    try {
-      const response = await backendClient.get("/quiz");
-      console.log(response.data);
-      setQuizzes(response.data);
-    } catch (error) {
-      console.error("Error fetching quizzes:", error);
-    }
-  };
+  // const deleteQuiz = async (quizId) => {
+  //   try {
+  //     await backendClient.delete(`/deleteQuiz/${quizId}`);
+  //     alert("Deleted successfully");
+  //     fetchQuizzes();
+  //   } catch (err) {
+  //     alert("Error in deleting quiz");
+  //     console.log(err);
+  //   }
+  // };
+  // const fetchQuizzes = async () => {
+  //   try {
+  //     const response = await backendClient.get("/quiz");
+  //     console.log(response.data);
+  //     setQuizzes(response.data);
+  //   } catch (error) {
+  //     console.error("Error fetching quizzes:", error);
+  //   }
+  // };
 
   return (
     <div className="text-center">
